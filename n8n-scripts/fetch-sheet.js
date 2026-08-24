@@ -1,5 +1,5 @@
 const client = $input.first().json;
-const sheetUrl = `https://docs.google.com/spreadsheets/d/${client.sheet_id}/gviz/tq?tqx=out:json&sheet=CRM`;
+const sheetUrl = `https://docs.google.com/spreadsheets/d/${client.sheet_id}/gviz/tq?tqx=out:json&sheet=%F0%9F%A7%B9%EF%B8%8F%E2%80%8F+CRM`;
 
 try {
   const response = await this.helpers.httpRequest({
@@ -13,9 +13,9 @@ try {
     raw = raw.replace(/^\/\*O_o\*\/\n/, '').replace(/^google\.visualization\.Query\.setResponse\(/, '').replace(/\);?\s*$/, '');
   }
   const data = JSON.parse(raw);
-  const rows = data.table?.rows || [];
+  const allRows = data.table?.rows || [];
 
-  const parsedRows = rows.map(row => {
+  const parsedRows = allRows.slice(18).map(row => {
     const c = row.c || [];
     return {
       data: c[0]?.v || null,
@@ -52,7 +52,7 @@ try {
     };
   });
 
-  return [{ json: { ...client, rows: parsedRows, total_rows: parsedRows.length } }];
+  return [{ json: { ...client, rows: parsedRows, total_rows: parsedRows.length, dashboard_rows: 18 } }];
 } catch (e) {
   return [{ json: { ...client, rows: [], total_rows: 0, error: e.message } }];
 }
