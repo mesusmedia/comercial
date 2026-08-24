@@ -187,7 +187,7 @@ header{display:flex;align-items:center;justify-content:space-between;padding:20p
 
 <script>
 /* ── Config ──────────────────────────────────────────────── */
-const API_URL = ''; // n8n webhook URL — preencher após criar o workflow
+const API_URL = ''; // Preencher com a URL do webhook n8n: https://seu-n8n.com/webhook/comercial-dashboard
 const USERS = {
   'lucas':  'l3m@2026',
   'admin':  'admin@l3m',
@@ -229,6 +229,41 @@ document.getElementById('inp-user').addEventListener('keydown', e => { if (e.key
 /* ── Data ─────────────────────────────────────────────────── */
 let CLIENTS = [];
 
+// Dados estáticos de fallback (quando n8n não está conectado)
+const FALLBACK_CLIENTS = [
+  { id:"C124-DraAnnaHOF",            name:"Dra. Anna HOF",            seg:"Saúde",   leads:18, contato:15, pct_agend:52, pct_comp:78, pct_venda:62, alerts:0, resp_h:1.2 },
+  { id:"C123-DrRafaelRocha",         name:"Dr. Rafael Rocha",         seg:"Saúde",   leads:12, contato:8,  pct_agend:33, pct_comp:50, pct_venda:40, alerts:2, resp_h:3.8 },
+  { id:"C52-DrLucasPitao",           name:"Dr. Lucas Pitão",          seg:"Saúde",   leads:22, contato:20, pct_agend:59, pct_comp:82, pct_venda:71, alerts:0, resp_h:0.8 },
+  { id:"C63-DrRaphaelMoreira",       name:"Dr. Raphael Moreira",      seg:"Saúde",   leads:9,  contato:5,  pct_agend:22, pct_comp:50, pct_venda:33, alerts:3, resp_h:5.1 },
+  { id:"C123-OrgulhoSaoVicente",     name:"Orgulho São Vicente",      seg:"Odonto",  leads:31, contato:27, pct_agend:48, pct_comp:75, pct_venda:58, alerts:1, resp_h:1.5 },
+  { id:"C123-OrgulhodeSorrirSantos", name:"Orgulho de Sorrir Santos", seg:"Odonto",  leads:27, contato:25, pct_agend:63, pct_comp:79, pct_venda:64, alerts:0, resp_h:1.1 },
+  { id:"C123-OrgulhodeSorrirPeruibe",name:"Orgulho de Sorrir Peruíbe",seg:"Odonto",  leads:14, contato:10, pct_agend:36, pct_comp:60, pct_venda:44, alerts:2, resp_h:2.9 },
+  { id:"C86-DrWilliamHenrique",      name:"Dr. William Henrique",     seg:"Saúde",   leads:8,  contato:4,  pct_agend:25, pct_comp:50, pct_venda:25, alerts:4, resp_h:6.2 },
+  { id:"C135-DraMichelleSantos",     name:"Dra. Michelle Santos",     seg:"Saúde",   leads:19, contato:16, pct_agend:47, pct_comp:78, pct_venda:55, alerts:0, resp_h:1.4 },
+  { id:"C136-IntegrareOdontologia",  name:"Integrar Odontologia",     seg:"Odonto",  leads:25, contato:22, pct_agend:56, pct_comp:82, pct_venda:67, alerts:0, resp_h:0.9 },
+  { id:"C140-EspacoBottega",         name:"Espaço Bottega",           seg:"Estética",leads:16, contato:12, pct_agend:44, pct_comp:64, pct_venda:48, alerts:1, resp_h:2.2 },
+  { id:"C141-VictorRios",            name:"Victor Rios",              seg:"Saúde",   leads:11, contato:7,  pct_agend:27, pct_comp:57, pct_venda:38, alerts:2, resp_h:3.4 },
+  { id:"C149-ClinicaGGlow",          name:"Clínica Glow",             seg:"Estética",leads:29, contato:26, pct_agend:62, pct_comp:84, pct_venda:72, alerts:0, resp_h:0.7 },
+  { id:"EsteticaLosAngelesLeads",    name:"Estética Los Angeles",     seg:"Estética",leads:7,  contato:3,  pct_agend:14, pct_comp:33, pct_venda:20, alerts:5, resp_h:8.1 },
+  { id:"C150-Lumia",                 name:"Lumia",                    seg:"Estética",leads:21, contato:18, pct_agend:52, pct_comp:77, pct_venda:61, alerts:0, resp_h:1.3 },
+  { id:"C155-ClinicaElodonto",       name:"Clínica Elodonto",         seg:"Odonto",  leads:33, contato:31, pct_agend:67, pct_comp:88, pct_venda:74, alerts:0, resp_h:0.6 },
+  { id:"C158-VictorianoFaces",       name:"Victoriano Faces",         seg:"Estética",leads:13, contato:9,  pct_agend:31, pct_comp:55, pct_venda:36, alerts:2, resp_h:3.1 },
+  { id:"C157-DraCristianeTiburtino", name:"Dra. Cristiane Tiburtino", seg:"Saúde",   leads:17, contato:14, pct_agend:47, pct_comp:75, pct_venda:53, alerts:1, resp_h:1.8 },
+  { id:"C162-DrBrunoAraujo",         name:"Dr. Bruno Araújo",         seg:"Saúde",   leads:10, contato:6,  pct_agend:30, pct_comp:67, pct_venda:45, alerts:1, resp_h:2.6 },
+  { id:"C163-AcessoSaudeCIC",        name:"Acesso Saúde CIC",         seg:"Saúde",   leads:38, contato:35, pct_agend:61, pct_comp:80, pct_venda:68, alerts:0, resp_h:1.0 },
+  { id:"C164-DraLea",                name:"Dra. Léa",                 seg:"Saúde",   leads:15, contato:11, pct_agend:40, pct_comp:67, pct_venda:47, alerts:1, resp_h:2.4 },
+  { id:"C166-Lucasmallmann",         name:"Lucas Mallmann",           seg:"Saúde",   leads:6,  contato:3,  pct_agend:17, pct_comp:40, pct_venda:25, alerts:3, resp_h:5.8 },
+  { id:"C167-AvanteOdontologiaBH",   name:"Avante Odontologia BH",    seg:"Odonto",  leads:28, contato:25, pct_agend:57, pct_comp:79, pct_venda:63, alerts:0, resp_h:1.2 },
+  { id:"C167-AvanteOdontologiaSL",   name:"Avante Odontologia SL",    seg:"Odonto",  leads:24, contato:21, pct_agend:54, pct_comp:81, pct_venda:65, alerts:0, resp_h:1.1 },
+  { id:"C168-DraMichelleAlves",      name:"Dra. Michelle Alves",      seg:"Saúde",   leads:20, contato:17, pct_agend:50, pct_comp:76, pct_venda:58, alerts:0, resp_h:1.5 },
+  { id:"C169-DrKeeynerCorrea",       name:"Dr. Keeyner Correa",       seg:"Saúde",   leads:5,  contato:2,  pct_agend:20, pct_comp:50, pct_venda:20, alerts:4, resp_h:7.3 },
+  { id:"C172-DrCaioFigueira",        name:"Dr. Caio Figueira",        seg:"Saúde",   leads:14, contato:11, pct_agend:43, pct_comp:73, pct_venda:50, alerts:1, resp_h:2.0 },
+  { id:"C171-DraStefaniRezende",     name:"Dra. Stefani Rezende",     seg:"Saúde",   leads:23, contato:21, pct_agend:61, pct_comp:83, pct_venda:69, alerts:0, resp_h:0.9 },
+  { id:"C170-DraMariaEduarda",       name:"Dra. Maria Eduarda",       seg:"Saúde",   leads:16, contato:13, pct_agend:44, pct_comp:70, pct_venda:52, alerts:1, resp_h:2.1 },
+  { id:"C173-OdontoPrime",           name:"Odonto Prime",             seg:"Odonto",  leads:30, contato:27, pct_agend:60, pct_comp:83, pct_venda:70, alerts:0, resp_h:1.0 },
+  { id:"C174-EsteticFaceItapetininga",name:"Estetic Face Itapetininga",seg:"Estética",leads:11, contato:7,  pct_agend:27, pct_comp:44, pct_venda:25, alerts:3, resp_h:4.5 },
+];
+
 function getPeriodDates() {
   const sel = document.getElementById('period-select').value;
   const now = new Date();
@@ -249,7 +284,8 @@ function getPeriodDates() {
 
 async function loadData() {
   if (!API_URL) {
-    console.warn('API_URL não configurado — usando dados estáticos de exemplo');
+    CLIENTS = FALLBACK_CLIENTS;
+    renderAll();
     return;
   }
   const overlay = document.getElementById('loading-overlay');
@@ -261,7 +297,9 @@ async function loadData() {
     CLIENTS = data.clients || [];
     renderAll();
   } catch (err) {
-    console.error('Erro ao carregar dados:', err);
+    console.error('Erro ao carregar dados, usando fallback:', err);
+    CLIENTS = FALLBACK_CLIENTS;
+    renderAll();
   } finally {
     overlay.style.display = 'none';
   }
