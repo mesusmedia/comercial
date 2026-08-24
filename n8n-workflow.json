@@ -18,7 +18,7 @@
       "position": [200, 500]
     },
     {
-      "parameters": { "jsCode": "// âš ï¸ COLE SEU TOKEN DO CHATWOOT AQUI âš ï¸\nconst API_TOKEN = 'COLE_SEU_TOKEN_AQUI';\n\nconst clients = [\n  { id: 'C124-DraAnnaHOF', name: 'Dra. Anna HOF', seg: 'SaÃºde', inbox_id: 124 },\n  { id: 'C123-DrRafaelRocha', name: 'Dr. Rafael Rocha', seg: 'SaÃºde', inbox_id: 123 },\n  { id: 'C52-DrLucasPitao', name: 'Dr. Lucas PitÃ£o', seg: 'SaÃºde', inbox_id: 52 },\n  { id: 'C63-DrRaphaelMoreira', name: 'Dr. Raphael Moreira', seg: 'SaÃºde', inbox_id: 63 },\n  { id: 'C123-OrgulhoSaoVicente', name: 'Orgulho SÃ£o Vicente', seg: 'Odonto', inbox_id: 123 },\n  { id: 'C123-OrgulhodeSorrirSantos', name: 'Orgulho de Sorrir Santos', seg: 'Odonto', inbox_id: 123 },\n  { id: 'C123-OrgulhodeSorrirPeruibe', name: 'Orgulho de Sorrir PeruÃ­be', seg: 'Odonto', inbox_id: 123 },\n  { id: 'C135-DraMichelleSantos', name: 'Dra. Michelle Santos', seg: 'SaÃºde', inbox_id: 135 },\n  { id: 'C136-IntegrareOdontologia', name: 'Integrar Odontologia', seg: 'Odonto', inbox_id: 136 },\n  { id: 'C140-EspacoBottega', name: 'EspaÃ§o Bottega', seg: 'EstÃ©tica', inbox_id: 140 },\n  { id: 'C141-VictorRios', name: 'Victor Rios', seg: 'SaÃºde', inbox_id: 141 },\n  { id: 'C149-ClinicaGGlow', name: 'ClÃ­nica Glow', seg: 'EstÃ©tica', inbox_id: 149 },\n  { id: 'EsteticaLosAngelesLeads', name: 'EstÃ©tica Los Angeles', seg: 'EstÃ©tica', inbox_id: null },\n  { id: 'C150-Lumia', name: 'Lumia', seg: 'EstÃ©tica', inbox_id: 150 },\n  { id: 'C155-ClinicaElodonto', name: 'ClÃ­nica Elodonto', seg: 'Odonto', inbox_id: 155 },\n  { id: 'C158-VictorianoFaces', name: 'Victoriano Faces', seg: 'EstÃ©tica', inbox_id: 158 },\n  { id: 'C157-DraCristianeTiburtino', name: 'Dra. Cristiane Tiburtino', seg: 'SaÃºde', inbox_id: 157 },\n  { id: 'C163-AcessoSaudeCIC', name: 'Acesso SaÃºde CIC', seg: 'SaÃºde', inbox_id: 163 },\n  { id: 'C164-DraLea', name: 'Dra. LÃ©a', seg: 'SaÃºde', inbox_id: 164 },\n  { id: 'C166-Lucasmallmann', name: 'Lucas Mallmann', seg: 'SaÃºde', inbox_id: 166 },\n  { id: 'C168-DraMichelleAlves', name: 'Dra. Michelle Alves', seg: 'SaÃºde', inbox_id: 168 },\n  { id: 'C169-DrKeeynerCorrea', name: 'Dr. Keeyner Correa', seg: 'SaÃºde', inbox_id: 169 },\n  { id: 'C172-DrCaioFigueira', name: 'Dr. Caio Figueira', seg: 'SaÃºde', inbox_id: 172 },\n  { id: 'C171-DraStefaniRezende', name: 'Dra. Stefani Rezende', seg: 'SaÃºde', inbox_id: 171 },\n  { id: 'C170-DraMariaEduarda', name: 'Dra. Maria Eduarda', seg: 'SaÃºde', inbox_id: 170 },\n  { id: 'C173-OdontoPrime', name: 'Odonto Prime', seg: 'Odonto', inbox_id: 173 },\n  { id: 'C174-EsteticFaceItapetininga', name: 'Estetic Face Itapetininga', seg: 'EstÃ©tica', inbox_id: 174 }\n];\n\nconst now = new Date();\nconst from = new Date(now.getFullYear(), now.getMonth(), 1).toISOString().split('T')[0];\nconst to = now.toISOString().split('T')[0];\n\nreturn clients.map(c => ({\n  json: { ...c, date_from: from, date_to: to }\n}));\n" },
+      "parameters": { "jsCode": "const clients = [\n  { id: 'C124-DraAnnaHOF', name: 'Dra. Anna HOF', seg: 'SaÃºde', inbox_id: 124 },\n  { id: 'C123-DrRafaelRocha', name: 'Dr. Rafael Rocha', seg: 'SaÃºde', inbox_id: 123 },\n  { id: 'C52-DrLucasPitao', name: 'Dr. Lucas PitÃ£o', seg: 'SaÃºde', inbox_id: 52 },\n  { id: 'C63-DrRaphaelMoreira', name: 'Dr. Raphael Moreira', seg: 'SaÃºde', inbox_id: 63 },\n  { id: 'C123-OrgulhoSaoVicente', name: 'Orgulho SÃ£o Vicente', seg: 'Odonto', inbox_id: 123 },\n  { id: 'C123-OrgulhodeSorrirSantos', name: 'Orgulho de Sorrir Santos', seg: 'Odonto', inbox_id: 123 },\n  { id: 'C123-OrgulhodeSorrirPeruibe', name: 'Orgulho de Sorrir PeruÃ­be', seg: 'Odonto', inbox_id: 123 },\n  { id: 'C135-DraMichelleSantos', name: 'Dra. Michelle Santos', seg: 'SaÃºde', inbox_id: 135 },\n  { id: 'C136-IntegrareOdontologia', name: 'Integrar Odontologia', seg: 'Odonto', inbox_id: 136 },\n  { id: 'C140-EspacoBottega', name: 'EspaÃ§o Bottega', seg: 'EstÃ©tica', inbox_id: 140 },\n  { id: 'C141-VictorRios', name: 'Victor Rios', seg: 'SaÃºde', inbox_id: 141 },\n  { id: 'C149-ClinicaGGlow', name: 'ClÃ­nica Glow', seg: 'EstÃ©tica', inbox_id: 149 },\n  { id: 'EsteticaLosAngelesLeads', name: 'EstÃ©tica Los Angeles', seg: 'EstÃ©tica', inbox_id: null },\n  { id: 'C150-Lumia', name: 'Lumia', seg: 'EstÃ©tica', inbox_id: 150 },\n  { id: 'C155-ClinicaElodonto', name: 'ClÃ­nica Elodonto', seg: 'Odonto', inbox_id: 155 },\n  { id: 'C158-VictorianoFaces', name: 'Victoriano Faces', seg: 'EstÃ©tica', inbox_id: 158 },\n  { id: 'C157-DraCristianeTiburtino', name: 'Dra. Cristiane Tiburtino', seg: 'SaÃºde', inbox_id: 157 },\n  { id: 'C163-AcessoSaudeCIC', name: 'Acesso SaÃºde CIC', seg: 'SaÃºde', inbox_id: 163 },\n  { id: 'C164-DraLea', name: 'Dra. LÃ©a', seg: 'SaÃºde', inbox_id: 164 },\n  { id: 'C166-Lucasmallmann', name: 'Lucas Mallmann', seg: 'SaÃºde', inbox_id: 166 },\n  { id: 'C168-DraMichelleAlves', name: 'Dra. Michelle Alves', seg: 'SaÃºde', inbox_id: 168 },\n  { id: 'C169-DrKeeynerCorrea', name: 'Dr. Keeyner Correa', seg: 'SaÃºde', inbox_id: 169 },\n  { id: 'C172-DrCaioFigueira', name: 'Dr. Caio Figueira', seg: 'SaÃºde', inbox_id: 172 },\n  { id: 'C171-DraStefaniRezende', name: 'Dra. Stefani Rezende', seg: 'SaÃºde', inbox_id: 171 },\n  { id: 'C170-DraMariaEduarda', name: 'Dra. Maria Eduarda', seg: 'SaÃºde', inbox_id: 170 },\n  { id: 'C173-OdontoPrime', name: 'Odonto Prime', seg: 'Odonto', inbox_id: 173 },\n  { id: 'C174-EsteticFaceItapetininga', name: 'Estetic Face Itapetininga', seg: 'EstÃ©tica', inbox_id: 174 }\n];\n\nconst now = new Date();\nconst from = new Date(now.getFullYear(), now.getMonth(), 1).toISOString().split('T')[0];\nconst to = now.toISOString().split('T')[0];\n\nreturn clients.map(c => ({\n  json: { ...c, date_from: from, date_to: to }\n}));\n" },
       "id": "list-clients",
       "name": "Lista Clientes",
       "type": "n8n-nodes-base.code",
@@ -26,12 +26,33 @@
       "position": [440, 400]
     },
     {
-      "parameters": { "jsCode": "const client = $input.first().json;\nconst allConversations = [];\nlet page = 1;\nlet hasMore = true;\n\nwhile (hasMore) {\n  try {\n    const url = `https://1048674045.chatwoot.com/api/v1/accounts/1/conversations?inbox_id=${client.inbox_id}&created_since=${client.date_from}T00:00:00.000Z&page=${page}`;\n    const response = await this.helpers.httpRequest({\n      method: 'GET',\n      url,\n      headers: { 'api_access_token': client.api_token },\n      returnFullResponse: true\n    });\n    const payload = response.body?.payload || [];\n    allConversations.push(...payload);\n    hasMore = payload.length === 30;\n    page++;\n  } catch (e) {\n    hasMore = false;\n  }\n}\n\nreturn [{ json: { ...client, allConversations } }];\n" },
-      "id": "fetch-conversations",
-      "name": "Buscar Conversas",
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [680, 400]
+      "parameters": {
+        "method": "GET",
+        "url": "=https://1048674045.chatwoot.com/api/v1/accounts/1/conversations",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            { "name": "inbox_id", "value": "={{ \.inbox_id }}" },
+            { "name": "created_since", "value": "={{ \.date_from }}T00:00:00.000Z" },
+            { "name": "page", "value": "1" }
+          ]
+        },
+        "options": { "timeout": 30000 }
+      },
+      "id": "fetch-chatwoot",
+      "name": "Buscar Chatwoot",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [680, 400],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "SELECIONE_SUA_CREDENCIAL",
+          "name": "Chatwoot API"
+        }
+      },
+      "continueOnFail": true
     },
     {
       "parameters": { "jsCode": "const client = $input.first().json;\nconst conversations = client.allConversations || [];\nconst now = new Date();\nconst from = new Date(now.getFullYear(), now.getMonth(), 1);\n\nlet leads = 0, contato = 0, agendamento = 0, comparecimento = 0, venda = 0, alerts = 0;\nlet totalRespTime = 0, respCount = 0;\n\nfor (const conv of conversations) {\n  const created = new Date(conv.created_at);\n  if (created < from) continue;\n  leads++;\n\n  if (conv.last_non_activity_at && conv.last_non_activity_at !== conv.created_at) {\n    contato++;\n  }\n\n  if (conv.status !== 'resolved' && conv.last_non_activity_at) {\n    const hoursSince = (now - new Date(conv.last_non_activity_at)) / 3600000;\n    if (hoursSince > 24) alerts++;\n  }\n\n  if (conv.first_reply_created_at) {\n    totalRespTime += (new Date(conv.first_reply_created_at) - created) / 3600000;\n    respCount++;\n  }\n\n  const tags = (conv.tags || []).map(t => t.toLowerCase());\n  if (tags.some(t => ['agendou','agendamento','scheduled','confirmou','agendado'].includes(t))) agendamento++;\n  if (tags.some(t => ['compareceu','comparecimento','attended'].includes(t))) comparecimento++;\n  if (tags.some(t => ['vendido','venda','sold','pagou','fechou'].includes(t))) venda++;\n}\n\nconst pct = (v, t) => t > 0 ? Math.round((v / t) * 100) : 0;\nreturn [{ json: {\n  id: client.id, name: client.name, seg: client.seg,\n  leads, contato, pct_agend: pct(agendamento, leads), pct_comp: pct(comparecimento, leads),\n  pct_venda: pct(venda, leads), alerts, resp_h: respCount > 0 ? Math.round((totalRespTime / respCount) * 10) / 10 : 0,\n  _debug: { total_convs: conversations.length, pages_fetched: Math.ceil(conversations.length / 30), inbox_id: client.inbox_id }\n}}];\n" },
@@ -84,8 +105,8 @@
   "connections": {
     "Schedule 08h00": { "main": [[{ "node": "Lista Clientes", "type": "main", "index": 0 }]] },
     "Teste Manual": { "main": [[{ "node": "Lista Clientes", "type": "main", "index": 0 }]] },
-    "Lista Clientes": { "main": [[{ "node": "Buscar Conversas", "type": "main", "index": 0 }]] },
-    "Buscar Conversas": { "main": [[{ "node": "Calcular Metricas", "type": "main", "index": 0 }]] },
+    "Lista Clientes": { "main": [[{ "node": "Buscar Chatwoot", "type": "main", "index": 0 }]] },
+    "Buscar Chatwoot": { "main": [[{ "node": "Calcular Metricas", "type": "main", "index": 0 }]] },
     "Calcular Metricas": { "main": [[{ "node": "Agrupar Resultado", "type": "main", "index": 0 }]] },
     "Agrupar Resultado": { "main": [[{ "node": "Webhook Response", "type": "main", "index": 0 }]] },
     "GET Dashboard": { "main": [[{ "node": "Datas Periodo", "type": "main", "index": 0 }]] },

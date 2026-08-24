@@ -1,6 +1,3 @@
-// ⚠️ COLE SEU TOKEN DO CHATWOOT AQUI ⚠️
-const API_TOKEN = 'COLE_SEU_TOKEN_AQUI';
-
 const clients = [
   { id: 'C124-DraAnnaHOF', name: 'Dra. Anna HOF', seg: 'Saúde', inbox_id: 124 },
   { id: 'C123-DrRafaelRocha', name: 'Dr. Rafael Rocha', seg: 'Saúde', inbox_id: 123 },
