@@ -130,10 +130,54 @@ Response:
 
 ## Clientes Ativos
 
+### Chatwoot (inbox por cliente)
+
 A instância Chatwoot padrão para todos os clientes é: **1048674045**
 
 O `inbox_id` de cada cliente corresponde ao número no prefixo do ID:
 `C124` → `inbox_id: 124` | `C86` → `inbox_id: 86` | `EsteticaLosAngelesLeads` → verificar manualmente
+
+### Kommo (funil compartilhado)
+
+3 clientes usam Kommo em vez de Chatwoot:
+
+| Cliente | ID | Subdomain Kommo |
+|---------|-----|-----------------|
+| Los Angeles Estética | C148 | L24881866 |
+| Dr. William Henrique | C86 | PREENCHER |
+| Dr. Bruno Araújo | C162 | PREENCHER |
+
+**Estágios do funil Kommo:**
+
+```
+[FV] NOVO LEAD                    → Lead entra automaticamente
+[FV] EM CONTATO                   → Atendimento ativo
+[FV] LEAD REENGAJADO             → Respondeu follow-up
+[FV] FOLLOW-UP 1                  → 1ª tentativa de resgate
+[FV] FOLLOW-UP 2                  → 2ª tentativa
+[FV] FOLLOW-UP 3                  → 3ª tentativa
+[FV] AGENDADO                     → Marcou consulta
+[FV] CONFIRMADO                   → Confirmou presença
+[FV] FALTOU                       → Agendou mas não compareceu
+[FV] LEAD REENGAJADO FALTOU       → Reengajou após falta
+[FV] FOLLOW-UP 123 FALTOU         → Follow-up de falta
+[FV] COMPARECEU                   → Compareceu à consulta
+[FV] NECESSITA EXAMES             → Precisa de exames
+[FV] ORÇAMENTO EM ABERTO          → Proposta enviada
+[FV] FOLLOW-UP 123 FALTOU ORÇ ABERTO → Follow-up pós-proposta
+[FV] VENDA GANHA                  → Comprou ✓
+[FV] VENDA PERDIDA                → Não comprou
+```
+
+**Mapeamento de métricas Kommo:**
+
+| Métrica | Estágios |
+|---------|----------|
+| Leads | Todos criados no período |
+| Contato | EM CONTATO, REENGAJADO, FOLLOW-UP 1/2/3, AGENDADO, CONFIRMADO, COMPARECEU, ORÇAMENTO, VENDA GANHA |
+| Agendamento | AGENDADO, CONFIRMADO, COMPARECEU, ORÇAMENTO, VENDA GANHA |
+| Comparecimento | COMPARECEU, NECESSITA EXAMES, ORÇAMENTO, VENDA GANHA |
+| Venda | VENDA GANHA |
 
 ```json
 [
