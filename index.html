@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Painel Comercial L3M</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* ── Tokens ─────────────────────────────────────────────── */
+:root {
+  --bg:          #0D1117;
+  --surface:     #161B27;
+  --surface-2:   #1C2233;
+  --border:      #1E2636;
+  --border-2:    #28324A;
+  --text:        #E4E8F4;
+  --text-2:      #8B95B0;
+  --text-3:      #5A6280;
+  --accent:      #4C6EF5;
+  --accent-dim:  rgba(76,110,245,.12);
+  --green:       #1FD68A;
+  --green-dim:   rgba(31,214,138,.10);
+  --amber:       #F0B429;
+  --amber-dim:   rgba(240,180,41,.10);
+  --red:         #F05252;
+  --red-dim:     rgba(240,82,82,.10);
+  --font-d:      'Syne', sans-serif;
+  --font-b:      'DM Sans', sans-serif;
+  --font-m:      'JetBrains Mono', monospace;
+  --r:           8px;
+  --r-lg:        12px;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --bg:          #F2F4F9;
+    --surface:     #FFFFFF;
+    --surface-2:   #F7F8FC;
+    --border:      #E2E6F0;
+    --border-2:    #CDD3E8;
+    --text:        #0D1117;
+    --text-2:      #4A5278;
+    --text-3:      #8B95B0;
+    --accent-dim:  rgba(76,110,245,.08);
+    --green-dim:   rgba(31,214,138,.08);
+    --amber-dim:   rgba(240,180,41,.08);
+    --red-dim:     rgba(240,82,82,.08);
+  }
+}
+:root[data-theme="light"] {
+  --bg:          #F2F4F9;
+  --surface:     #FFFFFF;
+  --surface-2:   #F7F8FC;
+  --border:      #E2E6F0;
+  --border-2:    #CDD3E8;
+  --text:        #0D1117;
+  --text-2:      #4A5278;
+  --text-3:      #8B95B0;
+  --accent-dim:  rgba(76,110,245,.08);
+  --green-dim:   rgba(31,214,138,.08);
+  --amber-dim:   rgba(240,180,41,.08);
+  --red-dim:     rgba(240,82,82,.08);
+}
+
+/* ── Reset ────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 14px; }
+body {
+  font-family: var(--font-b);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Layout shell ─────────────────────────────────────────── */
+.shell {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 24px 48px;
+}
+
+/* ── Header ───────────────────────────────────────────────── */
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(8px);
+}
+.brand {
+  font-family: var(--font-d);
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: -.02em;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.brand-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  display: inline-block;
+}
+.brand-sub {
+  font-weight: 400;
+  color: var(--text-2);
+  font-size: .85rem;
+  letter-spacing: .02em;
+}
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.header-meta { text-align: right; }
+.header-date {
+  font-family: var(--font-m);
+  font-size: .78rem;
+  color: var(--text-2);
+}
+.header-updated {
+  font-size: .72rem;
+  color: var(--text-3);
+  margin-top: 2px;
+}
+.theme-btn {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text-2);
+  padding: 6px 12px;
+  border-radius: var(--r);
+  cursor: pointer;
+  font-family: var(--font-b);
+  font-size: .78rem;
+  transition: border-color .15s, color .15s;
+}
+.theme-btn:hover { border-color: var(--border-2); color: var(--text); }
+
+/* ── Summary tiles ────────────────────────────────────────── */
+.summary {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  padding: 24px 0 20px;
+}
+@media (max-width: 900px) { .summary { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 600px) { .summary { grid-template-columns: repeat(2, 1fr); } }
+.tile {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 16px 18px;
+  position: relative;
+  overflow: hidden;
+}
+.tile::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--tile-accent, var(--accent));
+}
+.tile-label {
+  font-size: .72rem;
+  color: var(--text-3);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  font-weight: 500;
+}
+.tile-value {
+  font-family: var(--font-m);
+  font-size: 1.75rem;
+  font-weight: 500;
+  color: var(--text);
+  margin-top: 6px;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+.tile-sub {
+  font-size: .72rem;
+  color: var(--text-3);
+  margin-top: 4px;
+}
+.tile-green  { --tile-accent: var(--green); }
+.tile-amber  { --tile-accent: var(--amber); }
+.tile-red    { --tile-accent: var(--red); }
+.tile-accent { --tile-accent: var(--accent); }
+
+/* ── Filters ──────────────────────────────────────────────── */
+.filters {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 4px 0 20px;
+  flex-wrap: wrap;
+}
+.search {
+  flex: 1;
+  min-width: 200px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 8px 12px;
+  color: var(--text);
+  font-family: var(--font-b);
+  font-size: .85rem;
+  outline: none;
+  transition: border-color .15s;
+}
+.search::placeholder { color: var(--text-3); }
+.search:focus { border-color: var(--accent); }
+.chips { display: flex; gap: 6px; flex-wrap: wrap; }
+.chip {
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-2);
+  font-family: var(--font-b);
+  font-size: .78rem;
+  cursor: pointer;
+  transition: all .15s;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.chip:hover { border-color: var(--border-2); color: var(--text); }
+.chip.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+.chip-green.active  { background: var(--green);  border-color: var(--green);  color: #0D1117; }
+.chip-amber.active  { background: var(--amber);  border-color: var(--amber);  color: #0D1117; }
+.chip-red.active    { background: var(--red);    border-color: var(--red);    color: #fff; }
+.chip-count {
+  background: rgba(255,255,255,.15);
+  border-radius: 10px;
+  padding: 1px 6px;
+  font-family: var(--font-m);
+  font-size: .68rem;
+}
+.chip-green .chip-count, .chip-amber .chip-count { background: rgba(0,0,0,.12); }
+
+/* ── Grid ─────────────────────────────────────────────────── */
+#grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 12px;
+}
+.empty-state {
+  grid-column: 1/-1;
+  text-align: center;
+  color: var(--text-3);
+  padding: 60px 0;
+  font-size: .9rem;
+}
+
+/* ── Client card ──────────────────────────────────────────── */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  border-left: 3px solid var(--card-color, var(--border));
+  overflow: hidden;
+  transition: border-color .15s, transform .1s;
+  cursor: default;
+}
+.card:hover { border-color: var(--card-color, var(--border-2)); transform: translateY(-1px); }
+.card.green  { --card-color: var(--green); }
+.card.amber  { --card-color: var(--amber); }
+.card.red    { --card-color: var(--red); }
+
+.card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 14px 16px 10px;
+  gap: 8px;
+}
+.card-name {
+  font-family: var(--font-d);
+  font-size: .88rem;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.3;
+  word-break: break-word;
+}
+.card-id {
+  font-family: var(--font-m);
+  font-size: .65rem;
+  color: var(--text-3);
+  margin-top: 2px;
+}
+.status-badge {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px 3px 7px;
+  border-radius: 12px;
+  font-size: .7rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.status-badge.green { background: var(--green-dim); color: var(--green); }
+.status-badge.amber { background: var(--amber-dim); color: var(--amber); }
+.status-badge.red   { background: var(--red-dim);   color: var(--red); }
+.status-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.card-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.metric {
+  padding: 10px 12px;
+  border-right: 1px solid var(--border);
+  text-align: center;
+}
+.metric:last-child { border-right: none; }
+.metric-val {
+  font-family: var(--font-m);
+  font-size: .9rem;
+  font-weight: 500;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+.metric-val.good   { color: var(--green); }
+.metric-val.warn   { color: var(--amber); }
+.metric-val.bad    { color: var(--red); }
+.metric-lbl {
+  font-size: .62rem;
+  color: var(--text-3);
+  margin-top: 3px;
+  white-space: nowrap;
+}
+
+.card-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+}
+.alerts {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: .72rem;
+  color: var(--text-3);
+}
+.alert-count {
+  background: var(--red-dim);
+  color: var(--red);
+  border-radius: 10px;
+  padding: 1px 7px;
+  font-family: var(--font-m);
+  font-size: .68rem;
+  font-weight: 500;
+}
+.alert-count.zero {
+  background: var(--green-dim);
+  color: var(--green);
+}
+.card-seg {
+  font-size: .66rem;
+  color: var(--text-3);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 2px 7px;
+}
+
+/* ── Scrollbar ────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border-2); border-radius: 3px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .card, .chip, .theme-btn, .search { transition: none; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <span class="brand-dot"></span>
+    L3M <span class="brand-sub">Comercial</span>
+  </div>
+  <div class="header-right">
+    <div class="header-meta">
+      <div class="header-date" id="hdr-date">—</div>
+      <div class="header-updated" id="hdr-updated">carregando...</div>
+    </div>
+    <button class="theme-btn" onclick="toggleTheme()">tema</button>
+  </div>
+</header>
+
+<div class="shell">
+  <section class="summary" id="summary"></section>
+
+  <div class="filters">
+    <input class="search" type="text" placeholder="Buscar cliente…" id="search" oninput="applyFilters()">
+    <div class="chips">
+      <button class="chip active" data-filter="all"    onclick="setFilter('all')">Todos <span class="chip-count" id="cnt-all">0</span></button>
+      <button class="chip chip-green" data-filter="green" onclick="setFilter('green')">Saudável <span class="chip-count" id="cnt-green">0</span></button>
+      <button class="chip chip-amber" data-filter="amber" onclick="setFilter('amber')">Atenção <span class="chip-count" id="cnt-amber">0</span></button>
+      <button class="chip chip-red"   data-filter="red"   onclick="setFilter('red')">Gargalo <span class="chip-count" id="cnt-red">0</span></button>
+    </div>
+  </div>
+
+  <section id="grid"></section>
+</div>
+
+<script>
+/* ── Data ─────────────────────────────────────────────────── */
+// n8n popula este array diariamente via Google Sheets API
+// Para adicionar novo cliente, adicionar entrada em CLIENTS
+const CLIENTS = [
+  { id:"C124-DraAnnaHOF",            name:"Dra. Anna HOF",            seg:"Saúde",      leads:18, contato:83, agend:52, comp:78, venda:62, alerts:0, resp:1.2 },
+  { id:"C123-DrRafaelRocha",         name:"Dr. Rafael Rocha",         seg:"Saúde",      leads:12, contato:67, agend:33, comp:50, venda:40, alerts:2, resp:3.8 },
+  { id:"C52-DrLucasPitao",           name:"Dr. Lucas Pitão",          seg:"Saúde",      leads:22, contato:91, agend:59, comp:82, venda:71, alerts:0, resp:0.8 },
+  { id:"C63-DrRaphaelMoreira",       name:"Dr. Raphael Moreira",      seg:"Saúde",      leads:9,  contato:56, agend:22, comp:50, venda:33, alerts:3, resp:5.1 },
+  { id:"C123-OrgulhoSaoVicente",     name:"Orgulho São Vicente",      seg:"Odonto",     leads:31, contato:87, agend:48, comp:75, venda:58, alerts:1, resp:1.5 },
+  { id:"C123-OrgulhodeSorrirSantos", name:"Orgulho de Sorrir Santos", seg:"Odonto",     leads:27, contato:93, agend:63, comp:79, venda:64, alerts:0, resp:1.1 },
+  { id:"C123-OrgulhodeSorrirPeruibe",name:"Orgulho de Sorrir Peruíbe",seg:"Odonto",     leads:14, contato:71, agend:36, comp:60, venda:44, alerts:2, resp:2.9 },
+  { id:"C86-DrWilliamHenrique",      name:"Dr. William Henrique",     seg:"Saúde",      leads:8,  contato:50, agend:25, comp:50, venda:25, alerts:4, resp:6.2 },
+  { id:"C135-DraMichelleSantos",     name:"Dra. Michelle Santos",     seg:"Saúde",      leads:19, contato:84, agend:47, comp:78, venda:55, alerts:0, resp:1.4 },
+  { id:"C136-IntegrareOdontologia",  name:"Integrar Odontologia",     seg:"Odonto",     leads:25, contato:88, agend:56, comp:82, venda:67, alerts:0, resp:0.9 },
+  { id:"C140-EspacoBottega",         name:"Espaço Bottega",           seg:"Estética",   leads:16, contato:75, agend:44, comp:64, venda:48, alerts:1, resp:2.2 },
+  { id:"C141-VictorRios",            name:"Victor Rios",              seg:"Saúde",      leads:11, contato:64, agend:27, comp:57, venda:38, alerts:2, resp:3.4 },
+  { id:"C149-ClinicaGGlow",          name:"Clínica Glow",             seg:"Estética",   leads:29, contato:90, agend:62, comp:84, venda:72, alerts:0, resp:0.7 },
+  { id:"EsteticaLosAngelesLeads",    name:"Estética Los Angeles",     seg:"Estética",   leads:7,  contato:43, agend:14, comp:33, venda:20, alerts:5, resp:8.1 },
+  { id:"C150-Lumia",                 name:"Lumia",                    seg:"Estética",   leads:21, contato:86, agend:52, comp:77, venda:61, alerts:0, resp:1.3 },
+  { id:"C155-ClinicaElodonto",       name:"Clínica Elodonto",         seg:"Odonto",     leads:33, contato:94, agend:67, comp:88, venda:74, alerts:0, resp:0.6 },
+  { id:"C158-VictorianoFaces",       name:"Victoriano Faces",         seg:"Estética",   leads:13, contato:69, agend:31, comp:55, venda:36, alerts:2, resp:3.1 },
+  { id:"C157-DraCristianeTiburtino", name:"Dra. Cristiane Tiburtino", seg:"Saúde",      leads:17, contato:82, agend:47, comp:75, venda:53, alerts:1, resp:1.8 },
+  { id:"C162-DrBrunoAraujo",         name:"Dr. Bruno Araújo",         seg:"Saúde",      leads:10, contato:60, agend:30, comp:67, venda:45, alerts:1, resp:2.6 },
+  { id:"C163-AcessoSaudeCIC",        name:"Acesso Saúde CIC",         seg:"Saúde",      leads:38, contato:92, agend:61, comp:80, venda:68, alerts:0, resp:1.0 },
+  { id:"C164-DraLea",                name:"Dra. Léa",                 seg:"Saúde",      leads:15, contato:73, agend:40, comp:67, venda:47, alerts:1, resp:2.4 },
+  { id:"C166-Lucasmallmann",         name:"Lucas Mallmann",           seg:"Saúde",      leads:6,  contato:50, agend:17, comp:40, venda:25, alerts:3, resp:5.8 },
+  { id:"C167-AvanteOdontologiaBH",   name:"Avante Odontologia BH",    seg:"Odonto",     leads:28, contato:89, agend:57, comp:79, venda:63, alerts:0, resp:1.2 },
+  { id:"C167-AvanteOdontologiaSL",   name:"Avante Odontologia SL",    seg:"Odonto",     leads:24, contato:87, agend:54, comp:81, venda:65, alerts:0, resp:1.1 },
+  { id:"C168-DraMichelleAlves",      name:"Dra. Michelle Alves",      seg:"Saúde",      leads:20, contato:85, agend:50, comp:76, venda:58, alerts:0, resp:1.5 },
+  { id:"C169-DrKeeynerCorrea",       name:"Dr. Keeyner Correa",       seg:"Saúde",      leads:5,  contato:40, agend:20, comp:50, venda:20, alerts:4, resp:7.3 },
+  { id:"C172-DrCaioFigueira",        name:"Dr. Caio Figueira",        seg:"Saúde",      leads:14, contato:79, agend:43, comp:73, venda:50, alerts:1, resp:2.0 },
+  { id:"C171-DraStefaniRezende",     name:"Dra. Stefani Rezende",     seg:"Saúde",      leads:23, contato:91, agend:61, comp:83, venda:69, alerts:0, resp:0.9 },
+  { id:"C170-DraMariaEduarda",       name:"Dra. Maria Eduarda",       seg:"Saúde",      leads:16, contato:81, agend:44, comp:70, venda:52, alerts:1, resp:2.1 },
+  { id:"C173-OdontoPrime",           name:"Odonto Prime",             seg:"Odonto",     leads:30, contato:90, agend:60, comp:83, venda:70, alerts:0, resp:1.0 },
+  { id:"C174-EsteticFaceItapetininga",name:"Estetic Face Itapetininga",seg:"Estética", leads:11, contato:64, agend:27, comp:44, venda:25, alerts:3, resp:4.5 },
+];
+
+/* ── Classify ─────────────────────────────────────────────── */
+function classify(c) {
+  if (c.alerts >= 3 || c.agend < 25 || c.comp < 50 || c.venda < 30) return 'red';
+  if (c.alerts >= 1 || c.agend < 40 || c.comp < 65 || c.venda < 50) return 'amber';
+  return 'green';
+}
+
+/* ── Summary tiles ────────────────────────────────────────── */
+function renderSummary() {
+  const totalLeads  = CLIENTS.reduce((a,c) => a + c.leads, 0);
+  const avgAgend    = Math.round(CLIENTS.reduce((a,c) => a + c.agend, 0) / CLIENTS.length);
+  const avgComp     = Math.round(CLIENTS.reduce((a,c) => a + c.comp,  0) / CLIENTS.length);
+  const totalAlerts = CLIENTS.reduce((a,c) => a + c.alerts, 0);
+  const greens      = CLIENTS.filter(c => classify(c) === 'green').length;
+  const ambers      = CLIENTS.filter(c => classify(c) === 'amber').length;
+  const reds        = CLIENTS.filter(c => classify(c) === 'red').length;
+
+  document.getElementById('summary').innerHTML = `
+    <div class="tile tile-accent">
+      <div class="tile-label">Leads hoje</div>
+      <div class="tile-value">${totalLeads}</div>
+      <div class="tile-sub">${CLIENTS.length} clientes ativos</div>
+    </div>
+    <div class="tile tile-green">
+      <div class="tile-label">Saudável</div>
+      <div class="tile-value">${greens}</div>
+      <div class="tile-sub">acima do benchmark</div>
+    </div>
+    <div class="tile tile-amber">
+      <div class="tile-label">Atenção</div>
+      <div class="tile-value">${ambers}</div>
+      <div class="tile-sub">monitorar hoje</div>
+    </div>
+    <div class="tile tile-red">
+      <div class="tile-label">Gargalo</div>
+      <div class="tile-value">${reds}</div>
+      <div class="tile-sub">ação imediata</div>
+    </div>
+    <div class="tile">
+      <div class="tile-label">Alertas ativos</div>
+      <div class="tile-value">${totalAlerts}</div>
+      <div class="tile-sub">leads sem contato</div>
+    </div>
+  `;
+
+  document.getElementById('cnt-all').textContent   = CLIENTS.length;
+  document.getElementById('cnt-green').textContent = greens;
+  document.getElementById('cnt-amber').textContent = ambers;
+  document.getElementById('cnt-red').textContent   = reds;
+}
+
+/* ── Render cards ─────────────────────────────────────────── */
+function rateClass(val, good, warn) {
+  if (val >= good) return 'good';
+  if (val >= warn) return 'warn';
+  return 'bad';
+}
+
+function cardHTML(c) {
+  const status = classify(c);
+  const labels = { green:'Saudável', amber:'Atenção', red:'Gargalo' };
+  return `
+    <div class="card ${status}" data-status="${status}" data-name="${c.name.toLowerCase()} ${c.id.toLowerCase()}">
+      <div class="card-head">
+        <div>
+          <div class="card-name">${c.name}</div>
+          <div class="card-id">${c.id}</div>
+        </div>
+        <div class="status-badge ${status}">
+          <span class="status-dot"></span>${labels[status]}
+        </div>
+      </div>
+      <div class="card-metrics">
+        <div class="metric">
+          <div class="metric-val">${c.leads}</div>
+          <div class="metric-lbl">leads</div>
+        </div>
+        <div class="metric">
+          <div class="metric-val ${rateClass(c.agend,40,25)}">${c.agend}%</div>
+          <div class="metric-lbl">agend.</div>
+        </div>
+        <div class="metric">
+          <div class="metric-val ${rateClass(c.comp,70,50)}">${c.comp}%</div>
+          <div class="metric-lbl">compar.</div>
+        </div>
+        <div class="metric">
+          <div class="metric-val ${rateClass(c.venda,50,30)}">${c.venda}%</div>
+          <div class="metric-lbl">venda</div>
+        </div>
+      </div>
+      <div class="card-foot">
+        <div class="alerts">
+          <span class="alert-count ${c.alerts === 0 ? 'zero' : ''}">${c.alerts === 0 ? '✓' : c.alerts}</span>
+          ${c.alerts === 0 ? 'sem alertas' : `alerta${c.alerts > 1 ? 's' : ''}`}
+        </div>
+        <div class="card-seg">${c.seg}</div>
+      </div>
+    </div>
+  `;
+}
+
+/* ── Filter + search ──────────────────────────────────────── */
+let activeFilter = 'all';
+
+function setFilter(f) {
+  activeFilter = f;
+  document.querySelectorAll('.chip').forEach(el => {
+    el.classList.toggle('active', el.dataset.filter === f);
+  });
+  applyFilters();
+}
+
+function applyFilters() {
+  const q = document.getElementById('search').value.toLowerCase();
+  document.querySelectorAll('.card').forEach(el => {
+    const matchStatus = activeFilter === 'all' || el.dataset.status === activeFilter;
+    const matchSearch = !q || el.dataset.name.includes(q);
+    el.style.display = (matchStatus && matchSearch) ? '' : 'none';
+  });
+  const visible = document.querySelectorAll('.card:not([style*="none"])').length;
+  const empty = document.getElementById('empty');
+  if (empty) empty.style.display = visible === 0 ? '' : 'none';
+}
+
+/* ── Init ─────────────────────────────────────────────────── */
+function init() {
+  renderSummary();
+
+  const grid = document.getElementById('grid');
+  const sorted = [...CLIENTS].sort((a,b) => {
+    const order = { red:0, amber:1, green:2 };
+    return order[classify(a)] - order[classify(b)];
+  });
+  grid.innerHTML = sorted.map(cardHTML).join('') +
+    `<div class="empty-state" id="empty" style="display:none">Nenhum cliente encontrado.</div>`;
+
+  const now = new Date();
+  document.getElementById('hdr-date').textContent =
+    now.toLocaleDateString('pt-BR', { day:'2-digit', month:'short', year:'numeric' });
+  document.getElementById('hdr-updated').textContent =
+    `Atualizado às ${now.toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' })}`;
+}
+
+/* ── Theme toggle ─────────────────────────────────────────── */
+function toggleTheme() {
+  const root = document.documentElement;
+  const current = root.getAttribute('data-theme');
+  root.setAttribute('data-theme', current === 'light' ? 'dark' : 'light');
+}
+
+init();
+</script>
+</body>
+</html>
