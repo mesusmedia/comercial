@@ -38,17 +38,36 @@
     },
     {
       "parameters": {
-        "jsCode": "const client = $input.first().json;\nconst API_TOKEN = $env.CHATWOOT_API_TOKEN;\nconst BASE = 'https://1048674045.chatwoot.com/api/v1/accounts/1';\n\nconst allConversations = [];\nlet page = 1;\nlet hasMore = true;\n\nwhile (hasMore) {\n  const url = `${BASE}/conversations?inbox_id=${client.inbox_id}&created_since=${client.date_from}T00:00:00.000Z&page=${page}`;\n  \n  try {\n    const res = await this.helpers.httpRequest({\n      method: 'GET',\n      url,\n      headers: { 'api_access_token': API_TOKEN },\n      returnFullResponse: true\n    });\n    \n    const payload = res.body?.payload || [];\n    allConversations.push(...payload);\n    hasMore = payload.length === 30;\n    page++;\n  } catch (e) {\n    hasMore = false;\n  }\n}\n\nreturn [{ json: { client, conversations: allConversations } }];"
+        "method": "GET",
+        "url": "=https://1048674045.chatwoot.com/api/v1/accounts/1/conversations",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            { "name": "inbox_id", "value": "={{ $json.inbox_id }}" },
+            { "name": "created_since", "value": "={{ $json.date_from }}T00:00:00.000Z" },
+            { "name": "page", "value": "1" }
+          ]
+        },
+        "options": { "timeout": 30000 }
       },
-      "id": "fetch-conversations",
-      "name": "Buscar Conversas",
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [680, 400]
+      "id": "fetch-chatwoot",
+      "name": "Buscar Chatwoot",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [680, 400],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "CHATWOOT_CREDENTIAL_ID",
+          "name": "Chatwoot API"
+        }
+      },
+      "continueOnFail": true
     },
     {
       "parameters": {
-        "jsCode": "const { client, conversations } = $input.first().json;\nconst now = new Date();\nconst from = new Date(now.getFullYear(), now.getMonth(), 1);\n\nlet leads = 0, contato = 0, agendamento = 0, comparecimento = 0, venda = 0, alerts = 0;\nlet totalRespTime = 0, respCount = 0;\n\nfor (const conv of conversations) {\n  const created = new Date(conv.created_at);\n  if (created < from) continue;\n  leads++;\n\n  if (conv.last_non_activity_at && conv.last_non_activity_at !== conv.created_at) {\n    contato++;\n  }\n\n  if (conv.status !== 'resolved' && conv.last_non_activity_at) {\n    const hoursSince = (now - new Date(conv.last_non_activity_at)) / 3600000;\n    if (hoursSince > 24) alerts++;\n  }\n\n  if (conv.first_reply_created_at) {\n    totalRespTime += (new Date(conv.first_reply_created_at) - created) / 3600000;\n    respCount++;\n  }\n\n  const tags = (conv.tags || []).map(t => t.toLowerCase());\n  if (tags.some(t => ['agendou','agendamento','scheduled','confirmou','agendado'].includes(t))) agendamento++;\n  if (tags.some(t => ['compareceu','comparecimento','attended'].includes(t))) comparecimento++;\n  if (tags.some(t => ['vendido','venda','sold','pagou','fechou'].includes(t))) venda++;\n}\n\nconst pct = (v, t) => t > 0 ? Math.round((v / t) * 100) : 0;\nreturn [{ json: {\n  id: client.id, name: client.name, seg: client.seg,\n  leads, contato, pct_agend: pct(agendamento, leads), pct_comp: pct(comparecimento, leads),\n  pct_venda: pct(venda, leads), alerts, resp_h: respCount > 0 ? Math.round((totalRespTime / respCount) * 10) / 10 : 0,\n  _debug: { total_convs: conversations.length, inbox_id: client.inbox_id }\n}}];"
+        "jsCode": "const input = $input.first().json;\nconst client = {\n  id: input.client?.id || input.id,\n  name: input.client?.name || input.name,\n  seg: input.client?.seg || input.seg,\n  inbox_id: input.client?.inbox_id || input.inbox_id,\n  date_from: input.client?.date_from || input.date_from\n};\n\n// Pegar conversas do HTTP Response\nconst conversations = input.data?.payload || [];\n\nconst now = new Date();\nconst from = new Date(now.getFullYear(), now.getMonth(), 1);\n\nlet leads = 0, contato = 0, agendamento = 0, comparecimento = 0, venda = 0, alerts = 0;\nlet totalRespTime = 0, respCount = 0;\n\nfor (const conv of conversations) {\n  const created = new Date(conv.created_at);\n  if (created < from) continue;\n  leads++;\n\n  if (conv.last_non_activity_at && conv.last_non_activity_at !== conv.created_at) {\n    contato++;\n  }\n\n  if (conv.status !== 'resolved' && conv.last_non_activity_at) {\n    const hoursSince = (now - new Date(conv.last_non_activity_at)) / 3600000;\n    if (hoursSince > 24) alerts++;\n  }\n\n  if (conv.first_reply_created_at) {\n    totalRespTime += (new Date(conv.first_reply_created_at) - created) / 3600000;\n    respCount++;\n  }\n\n  const tags = (conv.tags || []).map(t => t.toLowerCase());\n  if (tags.some(t => ['agendou','agendamento','scheduled','confirmou','agendado'].includes(t))) agendamento++;\n  if (tags.some(t => ['compareceu','comparecimento','attended'].includes(t))) comparecimento++;\n  if (tags.some(t => ['vendido','venda','sold','pagou','fechou'].includes(t))) venda++;\n}\n\nconst pct = (v, t) => t > 0 ? Math.round((v / t) * 100) : 0;\nreturn [{ json: {\n  id: client.id, name: client.name, seg: client.seg,\n  leads, contato, pct_agend: pct(agendamento, leads), pct_comp: pct(comparecimento, leads),\n  pct_venda: pct(venda, leads), alerts, resp_h: respCount > 0 ? Math.round((totalRespTime / respCount) * 10) / 10 : 0,\n  _debug: { total_convs_fetched: conversations.length, inbox_id: client.inbox_id }\n}}];"
       },
       "id": "calculate-metrics",
       "name": "Calcular Métricas",
@@ -118,9 +137,9 @@
       "main": [[{ "node": "Lista Clientes", "type": "main", "index": 0 }]]
     },
     "Lista Clientes": {
-      "main": [[{ "node": "Buscar Conversas", "type": "main", "index": 0 }]]
+      "main": [[{ "node": "Buscar Chatwoot", "type": "main", "index": 0 }]]
     },
-    "Buscar Conversas": {
+    "Buscar Chatwoot": {
       "main": [[{ "node": "Calcular Métricas", "type": "main", "index": 0 }]]
     },
     "Calcular Métricas": {
